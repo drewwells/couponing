@@ -73,8 +73,12 @@ module.exports = function(app, passport, auth) {
 
     //Home route
     var index = require('../app/controllers/index');
+    var coupons = require('../app/controllers/coupons');
+    app.get('/coupons',coupons.all);
     app.get('/', index.render);
+    app.get('/validate', coupons.all, coupons.fresh, coupons.good, coupons.progress);
+    app.get('/validated', coupons.all, coupons.good, coupons.render);
 
-    var scraper = require('../app/controllers/scraper');
-    app.get('/scraper', scraper.render);
+    //var scraper = require('../app/controllers/scraper');
+    //app.get('/scraper', scraper.render);
 };
