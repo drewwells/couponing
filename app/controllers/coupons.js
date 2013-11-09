@@ -32,7 +32,7 @@ exports.update = function(coupon) {
         if(err)
             console.log('Updating error:',err);
     });
-}
+};
 
 
 var _fresh = function(cb){
@@ -51,10 +51,10 @@ var _validate = function() {
             }
         }
         setInterval(tick,12250);
-    })
-}
+    });
+};
 
-_validate();
+//_validate();
 
 function checkCode(coupon){
     request({
@@ -116,7 +116,7 @@ exports.fresh = function(req, res, next){
         }
         next();
     });
-}
+};
 
 exports.bad = function(req, res, next) {
     Coupon.find({ validated: 'false'}).exec(function(err, coupons){
@@ -130,7 +130,7 @@ exports.bad = function(req, res, next) {
         }
         next();
     })
-}
+};
 
 exports.good = function(req, res, next) {
     Coupon.find({ validated: 'true'}).exec(function(err, coupons){
@@ -143,7 +143,7 @@ exports.good = function(req, res, next) {
         }
         next();
     })
-}
+};
 
 exports.render = function(req, res) {
     res.render('coupon', {
@@ -158,6 +158,4 @@ exports.progress = function(req, res){
     var percent = Math.floor((req.good.length / req.all.length)*100*100)/100;
     res.send('Progress: ' + percent + '%');
     //res.send(JSON.stringify(req.bad));
-}
-
-
+};
