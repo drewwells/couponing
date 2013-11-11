@@ -36,7 +36,7 @@ exports.update = function(coupon) {
 
 
 var _fresh = function(cb){
-    Coupon.find({ validated: ''}).exec(function(err, coupons){
+    Coupon.find({ validated: '', submitted: false}).exec(function(err, coupons){
         cb(err, coupons);
     });
 };
@@ -89,7 +89,7 @@ function checkCode(coupon){
                 //console.log(errors.domain);
                 exports.update(coupon);
             } else {
-                keys = Object.keys(errors)
+                keys = Object.keys(errors);
 
                 if (keys.length === 1 && keys[0] === 'f_description') {
                     coupon.validated = true;
@@ -129,11 +129,11 @@ exports.bad = function(req, res, next) {
             req.bad = coupons;
         }
         next();
-    })
+    });
 };
 
 exports.good = function(req, res, next) {
-    Coupon.find({ validated: 'true'}).exec(function(err, coupons){
+    Coupon.find({ validated: 'true', submitted: false}).exec(function(err, coupons){
         if (err) {
             res.render('error', {
                 status: 500
@@ -142,7 +142,7 @@ exports.good = function(req, res, next) {
             req.good = coupons;
         }
         next();
-    })
+    });
 };
 
 exports.render = function(req, res) {

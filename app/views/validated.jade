@@ -1,7 +1,0 @@
-//extends layouts/default
-
-each coupon in validated
-  li= coupon.Site + " " + coupon.Code + " " + coupon.Title + " " + coupon.Expires
-
-block content
-  section(data-ng-view)

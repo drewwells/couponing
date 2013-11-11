@@ -36,6 +36,10 @@ var CouponSchema = new Schema({
     validated: {
         type: String,
         default: ''
+    },
+    submitted: {
+        type: Boolean,
+        default: false
     }
 }, {
     collection: 'unexpired'
