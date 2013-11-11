@@ -5,7 +5,8 @@ var mongoose = require('mongoose'),
     async = require('async'),
     Coupon = mongoose.model('Coupon'),
     request = require('request'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    numberToProcess = 25;
 
 /**
  * List of Articles
@@ -17,20 +18,39 @@ exports.all = function(req, res, next) {
                 status: 500
             });
         } else {
-            req.all = coupons;
+            res.locals.all = coupons;
 
         }
         next();
     });
 };
 
+exports.coupon = function(req,res,next,id) {
+    Coupon.load(id, function(err, coupon){
+        res.locals.coupon = coupon;
+    });
+};
 
-exports.update = function(coupon) {
-//    console.log('UPDATE',coupon);
+exports.coupons = function(req,res,next) {
+    var id, ids = req.query.couponIds;
+    res.locals.couponIds = req.query.couponIds;
+    Coupon.find({
+        '_id': { $in: ids }
+    }, function(err, docs){
+        res.locals.coupons = docs;
+        next();
+    });
+};
 
+exports.update = function(coupon, next) {
     coupon.save(function(err){
-        if(err)
+        if(err){
             console.log('Updating error:',err);
+        } else {
+            if( next ){
+                next();
+            }
+        }
     });
 };
 
@@ -53,10 +73,28 @@ var _validate = function() {
         setInterval(tick,12250);
     });
 };
+//Process a few coupons
+exports.process = function(req, res, next) {
 
-//_validate();
+    var fresh = res.locals.fresh.slice();
+    var coupons = fresh.splice(0,numberToProcess);
+    function iterate(){
+        if(!coupons) {
+            next();
+            return;
+        }
+        var coupon = coupons.pop();
+        if( coupon ){
+            checkCode(coupon,iterate);
+        } else {
+            next();
+        }
 
-function checkCode(coupon){
+    }
+    iterate();
+};
+
+function checkCode(coupon, cb){
     request({
         url:'http://www.retailmenot.com/ajax/checkCode.php',
         method: 'POST',
@@ -100,7 +138,7 @@ function checkCode(coupon){
                 }
             }
         }
-
+        cb();
     });
 }
 
@@ -112,7 +150,7 @@ exports.fresh = function(req, res, next){
                 status: 500
             });
         } else {
-            req.freshCoupons = coupons;
+            res.locals.fresh = coupons;
         }
         next();
     });
@@ -139,23 +177,51 @@ exports.good = function(req, res, next) {
                 status: 500
             });
         } else {
-            req.good = coupons;
+            res.locals.good = coupons;
         }
         next();
     });
 };
 
+exports.submitIds = function(req, res, next){
+    function popDoc() {
+        var doc;
+        if( res.locals.coupons.length ) {
+            doc = res.locals.coupons.pop();
+            doc.submitted = true;
+            exports.update(doc, function(){
+                popDoc();
+            });
+        } else {
+            res.json({ success: true, couponIds: res.locals.couponIds });
+        }
+    }
+    popDoc();
+
+};
+
 exports.render = function(req, res) {
+    var num = 10,
+        coupons = res.locals.good,
+        start = Math.floor(Math.random()*(coupons.length - num)),
+        randomCoupons = []
+    if(start+num <= coupons.length) {
+        randomCoupons = coupons.slice(start, start+num);
+    }
     res.render('coupon', {
-        coupons: req.good,
-        //all: req.coupons,
-        //coupons: req.validated,
-        content: 'Holla'
+        count: coupons.length,
+        coupons: randomCoupons,
+        processMore: !!coupons.length
     });
 };
 
 exports.progress = function(req, res){
-    var percent = Math.floor((req.good.length / req.all.length)*100*100)/100;
-    res.send('Progress: ' + percent + '%');
+    var good = res.locals.good;
+    var execution = new Date() - res.locals.req._startTime;
+    var percent = Math.floor(((good.length + numberToProcess) / res.locals.all.length)*100*100)/100;
+    var remaining = res.locals.all.length - good.length + numberToProcess;
+    res.send('Progress: ' + percent + '%<br/>' + 'Left to validate: '
+             + remaining + '<br/>'
+             + 'Validated ' + numberToProcess + ' coupons in ' + execution + 'ms');
     //res.send(JSON.stringify(req.bad));
 };

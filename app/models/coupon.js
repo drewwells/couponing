@@ -59,12 +59,12 @@ CouponSchema.path('Code').validate(function(title) {
 /**
  * Statics
  */
-/*ArticleSchema.statics = {
+CouponSchema.statics = {
     load: function(id, cb) {
         this.findOne({
             _id: id
-        }).populate('user', 'name username').exec(cb);
+        }).exec(cb);
     }
-};*/
+};
 
 mongoose.model('Coupon', CouponSchema);
