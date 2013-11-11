@@ -1,0 +1,15 @@
+.center {
+    text-align: center;
+}
+.number {
+    display: inline-block;
+    font-size: 16px;
+    color: #483c32;
+    background: lightgray;
+    border: solid 2px gray;
+    padding: 10px;
+}
+* {
+    font-size: 16px;
+
+}
