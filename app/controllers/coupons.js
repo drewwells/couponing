@@ -56,7 +56,11 @@ exports.update = function(coupon, next) {
 
 
 var _fresh = function(cb){
-    Coupon.find({ validated: '', submitted: false}).exec(function(err, coupons){
+    Coupon.find({ validated: '', submitted: false})
+    .sort({ dExpires: 1 })
+    //This is run a lot, limit size of query
+    .limit(100)
+    .exec(function(err, coupons){
         cb(err, coupons);
     });
 };
@@ -76,8 +80,11 @@ var _validate = function() {
 //Process a few coupons
 exports.process = function(req, res, next) {
 
-    var fresh = res.locals.fresh.slice();
-    var coupons = fresh.splice(0,numberToProcess);
+    var nums = numberToProcess, fresh = res.locals.fresh.slice();
+    if(req.query && req.query.couponIds){
+        nums = 5;
+    }
+    var coupons = fresh.splice(0,nums);
     function iterate(){
         if(!coupons) {
             next();
@@ -122,6 +129,10 @@ function checkCode(coupon, cb){
                 coupon.validated = false;
                 //console.log(errors.domain);
                 exports.update(coupon);
+            } else if(errors.domain && errors.domain === 'incorrect') {
+                coupon.validated = false;
+                //console.log(errors.domain);
+                exports.update(coupon);
             } else if(errors.f_code && errors.f_code === 'blocked') {
                 coupon.validated = false;
                 //console.log(errors.domain);
@@ -134,6 +145,7 @@ function checkCode(coupon, cb){
                     console.log('Valid Coupon!');
                     exports.update(coupon);
                 } else {
+                    console.log(coupon);
                     console.log(errors);
                 }
             }
@@ -196,7 +208,9 @@ exports.submitIds = function(req, res, next){
             res.json({ success: true, couponIds: res.locals.couponIds });
         }
     }
-    popDoc();
+    if( res.locals.coupons ) {
+        popDoc();
+    }
 
 };
 
@@ -204,7 +218,7 @@ exports.render = function(req, res) {
     var num = 10,
         coupons = res.locals.good,
         start = Math.floor(Math.random()*(coupons.length - num)),
-        randomCoupons = []
+        randomCoupons = [];
     if(start+num <= coupons.length) {
         randomCoupons = coupons.slice(start, start+num);
     }
@@ -220,8 +234,8 @@ exports.progress = function(req, res){
     var execution = new Date() - res.locals.req._startTime;
     var percent = Math.floor(((good.length + numberToProcess) / res.locals.all.length)*100*100)/100;
     var remaining = res.locals.all.length - good.length + numberToProcess;
-    res.send('Progress: ' + percent + '%<br/>' + 'Left to validate: '
-             + remaining + '<br/>'
-             + 'Validated ' + numberToProcess + ' coupons in ' + execution + 'ms');
+    res.send('Progress: ' + percent + '%<br/>' + 'Left to validate: ' +
+             remaining + '<br/>' +
+             'Validated ' + numberToProcess + ' coupons in ' + execution + 'ms');
     //res.send(JSON.stringify(req.bad));
 };

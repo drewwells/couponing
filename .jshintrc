@@ -1,5 +1,5 @@
 {
-    "asi": true,
+    "asi": true,  //suppress warnings about missing semicolons
     "node": true, // Enable globals available when code is running inside of the NodeJS runtime environment.
     "browser": true, // Standard browser globals e.g. `window`, `document`.
     "es5": true, // Allow EcmaScript 5 syntax.

@@ -75,8 +75,11 @@ module.exports = function(app, passport, auth) {
     var index = require('../app/controllers/index');
     var coupons = require('../app/controllers/coupons');
     app.get('/coupons',coupons.all);
-    app.get('/', index.render);
-    app.get('/validate', coupons.coupons, coupons.submitIds);
+    //app.get('/', index.render);
+    app.get('/', function(req,res){
+        res.redirect(301,'/validated');
+    });
+    app.get('/validate', coupons.coupons, coupons.fresh, coupons.process, coupons.submitIds);
     app.get('/progress', coupons.all, coupons.fresh, coupons.process, coupons.good, coupons.progress);
     app.get('/validated', coupons.all, coupons.good, coupons.render);
 

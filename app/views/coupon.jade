@@ -3,7 +3,7 @@ include includes/head
 link(rel='stylesheet', href='/css/coupon.css')
 body
   div.center
-    div.number Number of Coupons: #{count}
+    a.number(href='/progress') Number of Coupons: #{count}
 
   button.all Mark all & Refresh!
   table
