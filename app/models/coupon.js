@@ -29,6 +29,11 @@ var CouponSchema = new Schema({
         default: '',
         trim: true
     },
+    tier: {
+        type: String,
+        default: '',
+        trim: true
+    },
     Title: {
         type: String,
         default: ''

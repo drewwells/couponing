@@ -14,14 +14,24 @@ body
         th Code
         th Title
         th Expiration
+        th Tier
       each coupon in coupons
-        tr
-          td.hidden
-            button(id=coupon._id).submit submit
-          td #{coupon.Site}
-          td #{coupon.Code}
-          td #{coupon.Title}
-          td #{coupon.Expires}
+        td.hidden
+          button(id=coupon._id).submit submit
+        if coupon.tier
+          tr.highlight
+            td #{coupon.Site}
+            td #{coupon.Code}
+            td #{coupon.Title}
+            td #{coupon.Expires}
+            td #{coupon.tier}
+        else
+          tr
+            td #{coupon.Site}
+            td #{coupon.Code}
+            td #{coupon.Title}
+            td #{coupon.Expires}
+            td #{coupon.tier}
   #{processMore}
   if processMore
     a(href='/progress') Out of Coupons, Process more!

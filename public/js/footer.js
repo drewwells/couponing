@@ -8,7 +8,6 @@ $('.all').on('click',function(){
             //couponIds: ['52757da108f8f080fe7b53e6']
         },
         success: function(data){
-            console.log(data);
             window.location.reload(true);
         }
     });
