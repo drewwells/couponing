@@ -16,9 +16,11 @@
     padding: 10px;
 }
 td {
-    min-width: 100px;
+    min-width: 140px;
+    max-width: 200px;
     text-align: center;
     border: solid 1px green;
+    word-wrap: break-word;
 }
 * {
     font-size: 16px;
