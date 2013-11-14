@@ -1,0 +1,12 @@
+link(rel='stylesheet', href='/css/coupon.css')
+body
+h1 Top Tier Merchants
+table
+  tr
+    th store
+    th Tier
+  each store in stores
+    tr
+      td #{store.Store}
+      td #{store.Tier}
+

@@ -4,6 +4,7 @@
 var mongoose = require('mongoose'),
     async = require('async'),
     Coupon = mongoose.model('Coupon'),
+    Store = mongoose.model('Store'),
     request = require('request'),
     _ = require('underscore'),
     numberToProcess = 25;
@@ -56,7 +57,7 @@ exports.update = function(coupon, next) {
 
 
 var _fresh = function(cb){
-    Coupon.find({ validated: '', submitted: false, tier: {$ne: ''} })
+    Coupon.find({ validated: '', submitted: false, tier: {$exists: true, $nin: ['']} })
     .sort({ dExpires: 1 })
     //This is run a lot, limit size of query
     .limit(100)
@@ -102,13 +103,18 @@ exports.process = function(req, res, next) {
 };
 
 function checkCode(coupon, cb){
+    var code = coupon.Code;
+    if(/,/.test(code)) {
+        code = code.split(',')[0];
+    }
+
     request({
         url:'http://www.retailmenot.com/ajax/checkCode.php',
         method: 'POST',
         json: true,
         form: {
             domain: coupon.Site,
-            f_code: coupon.Code,
+            f_code: code,
             offerType: 'code'
         }
     },function(err, res, data){
@@ -192,6 +198,19 @@ exports.good = function(req, res, next) {
             res.locals.good = coupons;
         }
         next();
+    });
+};
+
+exports.stores = function(req, res, next) {
+    Store.find().sort({Store:1}).exec(function(err,stores){
+        res.locals.stores = stores;
+        next();
+    });
+};
+
+exports.renderStores = function(req, res) {
+    res.render('store', {
+        stores: res.locals.stores
     });
 };
 

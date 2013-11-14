@@ -82,6 +82,7 @@ module.exports = function(app, passport, auth) {
     app.get('/validate', coupons.coupons, coupons.fresh, coupons.process, coupons.submitIds);
     app.get('/progress', coupons.all, coupons.fresh, coupons.process, coupons.good, coupons.progress);
     app.get('/validated', coupons.all, coupons.good, coupons.render);
+    app.get('/stores', coupons.stores, coupons.renderStores);
 
     //var scraper = require('../app/controllers/scraper');
     //app.get('/scraper', scraper.render);
