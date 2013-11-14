@@ -1,7 +1,10 @@
-- var processMore = !count;
-include includes/head
-link(rel='stylesheet', href='/css/coupon.css')
-body
+
+extends layouts/shark-layout
+
+block head
+  title Submit Some Coupons!
+
+block content
   div.center
     a.number(href='/progress') Number of Coupons: #{count}
 
@@ -35,11 +38,10 @@ body
             td #{coupon.Expires}
             td #{coupon.Tested}
             td #{coupon.tier}
-  #{processMore}
+
+- var processMore = !count;
   if processMore
     a(href='/progress') Out of Coupons, Process more!
-block content
-  section(data-ng-view)
 
 script(type='text/javascript', src='/js/jquery-2.0.3.min.js')
 script(type='text/javascript', src='/js/footer.js')

@@ -1,12 +1,16 @@
-link(rel='stylesheet', href='/css/coupon.css')
-body
-h1 Top Tier Merchants
-table
-  tr
-    th store
-    th Tier
-  each store in stores
+extends layouts/shark-layout
+
+block head
+  title Top Tier Stores
+
+block content
+  h1 Top Tier Merchants
+  table
     tr
-      td #{store.Store}
-      td #{store.Tier}
+      th store
+      th Tier
+    each store in stores
+      tr
+        td #{store.Store}
+        td #{store.Tier}
 
