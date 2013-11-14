@@ -14,6 +14,7 @@ body
         th Code
         th Title
         th Expiration
+        th Tested
         th Tier
       each coupon in coupons
         td.hidden
@@ -24,6 +25,7 @@ body
             td #{coupon.Code}
             td #{coupon.Title}
             td #{coupon.Expires}
+            td #{coupon.Tested}
             td #{coupon.tier}
         else
           tr
@@ -31,6 +33,7 @@ body
             td #{coupon.Code}
             td #{coupon.Title}
             td #{coupon.Expires}
+            td #{coupon.Tested}
             td #{coupon.tier}
   #{processMore}
   if processMore

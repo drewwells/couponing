@@ -42,6 +42,11 @@ var CouponSchema = new Schema({
         type: String,
         default: ''
     },
+    Tested: {
+        type: String,
+        default: '',
+        trim: true
+    },
     submitted: {
         type: Boolean,
         default: false
