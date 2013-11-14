@@ -8,6 +8,20 @@ html
       block head
 
   body
+    #header
+      ul.header
+        li
+          h3 Zeus and the Big Deals
+        li
+          a(href='/stores') Top Tier stores
+        li
+          if readyToSubmit
+            a(href='/progress') Get More Coupons (#{readyToSubmit} Available)
+          else
+            a(href='/progress') Get More Coupons
+        li
+          a(href='/validated') Submit Some Coupons!
+
     #content
       block content
 

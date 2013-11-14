@@ -26,6 +26,13 @@ exports.all = function(req, res, next) {
     });
 };
 
+exports.count = function(req, res, next) {
+    Coupon.count()/*.populate('user', 'name username')*/.exec(function(err, c) {
+        res.locals.count = c;
+        next();
+    });
+}
+
 exports.coupon = function(req,res,next,id) {
     Coupon.load(id, function(err, coupon){
         res.locals.coupon = coupon;
@@ -235,28 +242,34 @@ exports.submitIds = function(req, res, next){
 
 exports.render = function(req, res) {
     var num = 10,
-        coupons = res.locals.good,
-        start = Math.floor(Math.random()*(coupons.length - num)),
+        good = res.locals.good,
+        start = Math.floor(Math.random()*(good.length - num)),
         randomCoupons = [];
-    if(start+num <= coupons.length) {
-        randomCoupons = coupons.slice(start, start+num);
+    if(start+num <= good.length) {
+        randomCoupons = good.slice(start, start+num);
     } else {
-        randomCoupons = coupons.slice(-num);
+        randomCoupons = good.slice(-num);
     }
     res.render('coupon', {
-        count: coupons.length,
+        readyToSubmit: good.length,
         coupons: randomCoupons,
-        processMore: !!coupons.length
+        processMore: !good.length
     });
 };
 
 exports.progress = function(req, res){
     var good = res.locals.good;
-    var execution = new Date() - res.locals.req._startTime;
-    var percent = Math.floor(((good.length + numberToProcess) / res.locals.all.length)*100*100)/100;
-    var remaining = res.locals.all.length - good.length + numberToProcess;
-    res.send('Progress: ' + percent + '%<br/>' + 'Left to validate: ' +
-             remaining + '<br/>' +
-             'Validated ' + numberToProcess + ' coupons in ' + execution + 'ms');
+    var count = res.locals.count;
+    var percent = Math.floor(((good.length + numberToProcess) / count)*100*100)/100;
+    var remaining = count - good.length + numberToProcess;
+
+    res.render('progress', {
+        count: count,
+        progress: percent,
+        readyToSubmit: good.length,
+        remaining: remaining,
+        processed: numberToProcess,
+        time: new Date() - res.locals.req._startTime
+    })
     //res.send(JSON.stringify(req.bad));
 };

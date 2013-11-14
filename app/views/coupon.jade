@@ -5,8 +5,13 @@ block head
   title Submit Some Coupons!
 
 block content
-  div.center
-    a.number(href='/progress') Number of Coupons: #{count}
+  //div.center
+  //  a.number(href='/progress') Number of Coupons: #{count}
+
+  p
+    span.note Note:
+    |  The below coupons are not currently on the RMN site.  Highlighted coupons indicate codes for Top Tier Merchants, these are worth double points.  After you have found the best coupons on this page, hit the 'Mark All & Refresh' button to get more coupons ready to submit.
+
 
   button.all Mark all & Refresh!
   table
@@ -39,10 +44,7 @@ block content
             td #{coupon.Tested}
             td #{coupon.tier}
 
-- var processMore = !count;
   if processMore
     a(href='/progress') Out of Coupons, Process more!
 
-script(type='text/javascript', src='/js/jquery-2.0.3.min.js')
-script(type='text/javascript', src='/js/footer.js')
 

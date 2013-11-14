@@ -80,7 +80,7 @@ module.exports = function(app, passport, auth) {
         res.redirect(301,'/validated');
     });
     app.get('/validate', coupons.coupons, coupons.fresh, coupons.process, coupons.submitIds);
-    app.get('/progress', coupons.all, coupons.fresh, coupons.process, coupons.good, coupons.progress);
+    app.get('/progress', coupons.count, coupons.fresh, coupons.process, coupons.good, coupons.progress);
     app.get('/validated', coupons.all, coupons.good, coupons.render);
     app.get('/stores', coupons.stores, coupons.renderStores);
 

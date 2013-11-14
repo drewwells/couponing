@@ -1,3 +1,10 @@
+html,body, ul{
+    padding: 0;
+    margin: 0;
+}
+body {
+    font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
 .hidden {
     display: none;
 }
@@ -15,6 +22,13 @@
     border: solid 2px gray;
     padding: 10px;
 }
+.note {
+    background: red;
+    color: white;
+}
+table {
+    border-collapse: collapse;
+}
 td {
     min-width: 140px;
     max-width: 200px;
@@ -25,4 +39,45 @@ td {
 * {
     font-size: 16px;
     font-weight: normal;
+}
+#header {
+  background: #563d7c;
+  color: #fff;
+}
+.header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.header li {
+    display: inline-block;
+    height: 50px;
+}
+.header li:last-child {
+    border-right-width: 1px;
+}
+.header a, .header h3 {
+    display: inline-block;
+    text-decoration: none;
+    height: 50px;
+    line-height: 50px;
+    margin: 0;
+    padding: 0 12px;
+    vertical-align: middle;
+}
+.header h3 {
+    font-size: 18px;
+}
+.header li a {
+    color: #cdbfe3;
+    font-size: 16px;
+}
+.header li:hover {
+    background: #463265;
+}
+.header li:hover a {
+    color: white;
+}
+#content {
+    margin: 12px;
 }

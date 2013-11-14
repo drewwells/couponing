@@ -1,0 +1,8 @@
+extends layouts/shark-layout
+
+block content
+  p Coupons in Database: #{count}
+  p Left to validate: #{remaining}
+  p Ready to Submit: #{readyToSubmit} (#{progress}%)
+  p Processed #{processed} Coupons Ready to Submit in #{time}ms
+
