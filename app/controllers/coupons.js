@@ -64,7 +64,7 @@ exports.update = function(coupon, next) {
 
 
 var _fresh = function(cb){
-    Coupon.find({ validated: '', submitted: false/*, tier: {$exists: true, $nin: ['']}*/ })
+    Coupon.find({ validated: '', submitted: false, /*tier: {$exists: true, $nin: ['']},*/ dExpires: {$gt: new Date()} })
     .sort({ dExpires: 1 })
     //This is run a lot, limit size of query
     .limit(100)
