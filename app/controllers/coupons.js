@@ -134,6 +134,10 @@ function checkCode(coupon, cb){
                 coupon.validated = false;
                 //console.log(errors.f_code);
                 exports.update(coupon);
+            } else if(errors.domain && errors.domain === 'missing') {
+                coupon.validated = false;
+                //console.log(errors.domain);
+                exports.update(coupon);
             } else if(errors.domain && errors.domain === 'not-accepting-code') {
                 coupon.validated = false;
                 //console.log(errors.domain);
@@ -143,6 +147,10 @@ function checkCode(coupon, cb){
                 //console.log(errors.domain);
                 exports.update(coupon);
             } else if(errors.domain && errors.domain === 'incorrect') {
+                coupon.validated = false;
+                //console.log(errors.domain);
+                exports.update(coupon);
+            } else if(errors.f_code && errors.f_code === 'missing-code') {
                 coupon.validated = false;
                 //console.log(errors.domain);
                 exports.update(coupon);
