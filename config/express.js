@@ -5,11 +5,18 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config');
+    config = require('./config'),
+    connectTimeout = require('connect-timeout');
+
+
 
 module.exports = function(app, passport, db) {
-    app.set('showStackError', true);    
-    
+    app.set('showStackError', true);
+
+    var timeout = connectTimeout({ time: 15000 });
+    //Globally defined 10s timeout
+    app.use(timeout);
+
     //Prettify HTML
     app.locals.pretty = true;
 

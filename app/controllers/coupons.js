@@ -88,10 +88,18 @@ var _validate = function() {
 //Process a few coupons
 exports.process = function(req, res, next) {
 
-    var nums = numberToProcess, fresh = res.locals.fresh.slice();
+    var async,
+        nums = numberToProcess, fresh = res.locals.fresh.slice(),
+        startTime = new Date();
     if(req.query && req.query.couponIds){
         nums = 5;
     }
+    //Death after 10seconds
+    /*setTimeout(function(){
+        console.log('aborting ajax call');
+        async.abort();
+        next();
+    }, 10000);*/
     var coupons = fresh.splice(0,nums);
     function iterate(){
         if(!coupons) {
@@ -99,8 +107,8 @@ exports.process = function(req, res, next) {
             return;
         }
         var coupon = coupons.pop();
-        if( coupon ){
-            checkCode(coupon,iterate);
+        if( coupon && (new Date() - startTime < 10000)){
+            async = checkCode(coupon,iterate);
         } else {
             next();
         }
@@ -115,9 +123,10 @@ function checkCode(coupon, cb){
         code = code.split(',')[0];
     }
 
-    request({
+    return request({
         url:'http://www.retailmenot.com/ajax/checkCode.php',
         method: 'POST',
+        timeout: 3000,
         json: true,
         form: {
             domain: coupon.Site,
@@ -125,10 +134,22 @@ function checkCode(coupon, cb){
             offerType: 'code'
         }
     },function(err, res, data){
-        var keys, errors = data.errors;
+        var keys, errors;
+        if(err){
+            console.log('500: Error');
+            console.log(err);
+            return;
+        }
         if(res.statusCode !== 200){
             console.log('500: SOMETHING WENT WRONG');
+            return;
         }
+        if(!data){
+            console.log('500: No data returned');
+            return;
+        }
+        errors = data.errors;
+
         if(errors) {
             if(errors.f_code && errors.f_code === 'exists') {
                 coupon.validated = false;
