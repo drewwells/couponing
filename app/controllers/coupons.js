@@ -95,11 +95,10 @@ exports.process = function(req, res, next) {
         nums = 5;
     }
     //Death after 10seconds
-    /*setTimeout(function(){
-        console.log('aborting ajax call');
-        async.abort();
+    setTimeout(function(){
+        console.log('500: aborting ajax call');
         next();
-    }, 10000);*/
+    }, 10000);
     var coupons = fresh.splice(0,nums);
     function iterate(){
         if(!coupons) {
@@ -107,7 +106,7 @@ exports.process = function(req, res, next) {
             return;
         }
         var coupon = coupons.pop();
-        if( coupon && (new Date() - startTime < 10000)){
+        if( coupon ){
             async = checkCode(coupon,iterate);
         } else {
             next();

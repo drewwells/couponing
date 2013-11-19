@@ -13,7 +13,7 @@ var express = require('express'),
 module.exports = function(app, passport, db) {
     app.set('showStackError', true);
 
-    var timeout = connectTimeout({ time: 15000 });
+    var timeout = connectTimeout({ time: 30000 });
     //Globally defined 10s timeout
     app.use(timeout);
 
