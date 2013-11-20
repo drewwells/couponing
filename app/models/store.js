@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var StoreSchema = new Schema({
-    Store: {
+    Site: {
         type: String,
         trim: true
     },
