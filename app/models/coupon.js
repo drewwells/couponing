@@ -74,6 +74,60 @@ CouponSchema.statics = {
         this.findOne({
             _id: id
         }).exec(cb);
+    },
+    byId: function(ids, cb){
+        this.find({
+            '_id': { $in: ids }
+        }, function(err, docs){
+            cb(docs);
+        });
+    },
+    fresh: function(cb) {
+        this.find({
+            validated: '',
+            submitted: false,
+            //tier: {$exists: true, $nin: ['']},
+            dExpires: {$gt: new Date()}
+        })
+        .sort({ tier: -1, dExpires: 1 })
+        .limit(100)
+        .exec(function(err, coupons){
+            if(err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+                cb(coupons);
+            }
+        });
+
+    },
+    good: function(cb){
+        this.find({
+            validated: 'true',
+            submitted: false
+        })
+        .exec(function(err, coupons){
+            if (err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+                cb(coupons);
+            }
+        });
+    },
+    bad: function(cb){
+        Coupon.find({ validated: 'false'}).exec(function(err, coupons){
+            if (err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+                console.log('BAD',coupons);
+                cb(coupons);
+            }
+        });
     }
 };
 
