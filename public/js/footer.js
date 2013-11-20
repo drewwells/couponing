@@ -12,3 +12,15 @@ $('.all').on('click',function(){
         }
     });
 });
+
+$('[draggable]').on('dragstart',function(ev){
+    var texts = $(this).find('td').map(function(){
+        return this.innerText;
+    });
+    event.dataTransfer.setData('text/plain',JSON.stringify({
+        'site': texts[0],
+        'code': texts[1].split(',')[0],
+        'description': texts[2],
+        'expires': texts[3]
+    }));
+});

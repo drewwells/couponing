@@ -21,7 +21,8 @@ html
             a(href='/progress') Get More Coupons
         li
           a(href='/validated') Submit Some Coupons!
-
+        li
+          a(href='javascript:(function()%7B%24(".hdr-container, h2, h1, .offer-type, label").hide()%3B%24("textarea").attr(%27rows%27,2)%3B%24(".expiration").removeClass(%27hidden%27)%3Bfunction focus()%7B%24("%23domain").focus()%3B%7D%24(%27form%27).off(%27submit%27,focus).on(%27submit%27,focus)%3B%24(document,%27form input%27).on(%27dragenter dragexit dragover%27,function()%7Breturn false%3B%7D).on(%27drop%27,function(ev)%7Bev.stopPropagation()%3Bif(!ev.originalEvent.dataTransfer)%7Breturn false%3B%7Dvar offer%3DJSON.parse(ev.originalEvent.dataTransfer.getData(%27text/plain%27))%3B%24("%23domain").val(offer.site).blur()%3B%24("%23f_code").val(offer.code).blur()%3B%24("%23f_description").val(offer.description)%3Bvar date%3Dnew Date(offer.expires)%3Bdate%3D(date.getMonth()%2B1)%2B%27/%27%2Bdate.getDate()%2B%27/%27%2Bdate.getFullYear()%3B%24("%23expires").val(date)%3Breturn false%3B%7D)%3B%7D)()%3B')  Coupon Submitter
     #content
       block content
 

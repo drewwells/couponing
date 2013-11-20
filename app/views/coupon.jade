@@ -28,7 +28,7 @@ block content
         td.hidden
           button(id=coupon._id).submit submit
         if coupon.tier
-          tr.highlight
+          tr.highlight(draggable='true')
             td #{coupon.Site}
             td #{coupon.Code}
             td #{coupon.Title}
@@ -36,7 +36,7 @@ block content
             td #{coupon.Tested}
             td #{coupon.tier}
         else
-          tr
+          tr(draggable='true')
             td #{coupon.Site}
             td #{coupon.Code}
             td #{coupon.Title}
@@ -46,5 +46,14 @@ block content
 
   if processMore
     a(href='/progress') Out of Coupons, Process more!
+
+  div
+    h2 Help Videos
+    li
+      a(href='http://gyazo.com/14252a28baccab074756184147ce991c') Introducing Drag and Drop Offers
+    li
+      a(href='http://gyazo.com/092f51dc8edb36b6b07f26825e0a0103') Installing the Drag and Drop Bookmarklet
+
+
 
 

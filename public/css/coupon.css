@@ -5,6 +5,21 @@ html,body, ul{
 body {
     font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
+h2 {
+    font-weight: bold;
+}
+[draggable] {
+    cursor: move;
+}
+/*[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}*/
 .hidden {
     display: none;
 }

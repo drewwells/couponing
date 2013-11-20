@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    heapdump = require('heapdump'),
     async = require('async'),
     Coupon = mongoose.model('Coupon'),
     Store = mongoose.model('Store'),
@@ -64,8 +65,12 @@ exports.update = function(coupon, next) {
 
 
 var _fresh = function(cb){
-    Coupon.find({ validated: '', submitted: false, /*tier: {$exists: true, $nin: ['']},*/ dExpires: {$gt: new Date()} })
-    .sort({ dExpires: 1 })
+    Coupon.find({ validated: '',
+                submitted: false,
+                //tier: {$exists: true, $nin: ['']},
+                dExpires: {$gt: new Date()}
+            })
+    .sort({ tier: -1, dExpires: 1 })
     //This is run a lot, limit size of query
     .limit(100)
     .exec(function(err, coupons){
@@ -224,7 +229,8 @@ exports.bad = function(req, res, next) {
 };
 
 exports.good = function(req, res, next) {
-    Coupon.find({ validated: 'true', submitted: false}).exec(function(err, coupons){
+    Coupon.find({ validated: 'true', submitted: false})
+        .exec(function(err, coupons){
         if (err) {
             res.render('error', {
                 status: 500
